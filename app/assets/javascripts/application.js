@@ -20,21 +20,35 @@
 //= require emotion_classifier
 //= require_tree .
 
+var sentences = [
+    "el ignorante afirma el sabio duda y reflexiona",
+    "el sabio no dice todo lo que piensa, pero siempre piensa todo lo que dice",
+    "no se puede ser y no ser algo al mismo tiempo y bajo el mismo aspecto",
+    "la riqueza consiste mucho más en el disfrute que en la posesión"
+];
+
+
+
 $(function () {
     if (annyang) {
         // Let's define a command.
-        var commands = {
-            'Tres tristes tigres comen trigo en un trigal': function () {
-                $("#read-sentence").html("Tres tristes trigres comen trigo en un trigal");
-                $("#correct-read").css({
-                    opacity: 1
-                });
-            },
-            'son las tres': function () {
 
-            }
-        };
+        var commands = {};
 
+        sentences.forEach(function (element) {
+            commands[element] = function () {
+                $("#read-sentence").html(element);
+                $("#correct-read").html("Has acertado, ouh yeah!");
+                setTimeout(function () {
+                    $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+                    $("#read-sentence").html("");
+                    $("#correct-read").html("");
+                }, 1000);
+                annyang.resume();
+            };
+        });
+
+        $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
 
         // Add our commands to annyang
         annyang.addCommands(commands);
@@ -51,8 +65,14 @@ $(function () {
 
         annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
             $("#read-sentence").html(userSaid[0]);
+            $("#correct-read").html("Has fallado =(");
             console.log(userSaid);
-
+            setTimeout(function () {
+                $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+                $("#read-sentence").html("");
+                $("#correct-read").html("");
+            }, 3000);
+            annyang.resume();
         });
 
 
