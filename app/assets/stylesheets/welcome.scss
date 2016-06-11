@@ -25,8 +25,7 @@ a, a:active, a:focus, a:hover{
 
 #emotion_container{
   position: absolute;
-  top: 70%;
-  margin-top: 60px;
+  top: 50px;
   right: 50px;
   // @include translate(-50%, 0);
 }
@@ -61,7 +60,6 @@ a, a:active, a:focus, a:hover{
   }
 }
 
-
 .button{
   text-align: center;
   color: white;
@@ -73,7 +71,6 @@ a, a:active, a:focus, a:hover{
   box-sizing: border-box;
   font-size: 18px;
   @include box-shadow(#ddd 5px 5px 10px);
-
   &:hover{
     @include box-shadow(#ddd 1px 1px 10px);
     box-sizing: border-box;
@@ -108,3 +105,17 @@ a, a:active, a:focus, a:hover{
 }
 
 
+.verify-voice {
+  @include translateX(-50%);
+  color: white;
+  position: absolute;
+  bottom: 100px;
+  width: 880px;
+  left: 50%;
+
+  .box {
+    background-color: rgba(255,255,255, .75);
+    color: #2E2F30;
+    height: auto;
+  }
+}
