@@ -1,8 +1,8 @@
 .verify-wrapper
   section.camera-section
     #container
-      video#videoel height="300" loop="" preload="auto" width="400" 
-      canvas#overlay height="300" width="400" 
+      video#videoel height="300" loop="" preload="auto" width="400"
+      canvas#overlay height="300" width="400"
     #emotion_container
       #emotion_icons
         = image_tag 'icon_angry.png', id: 'icon1', class: 'emotion_icon'
@@ -15,7 +15,7 @@
 
 
 
-  section.verify-voice
+  /section.verify-voice
     h1 Por favor, lea las siguientes frases:
     p#sentence-reading
     p#read-sentence
@@ -26,7 +26,7 @@ javascript:
   var vid = document.getElementById('videoel');
   var overlay = document.getElementById('overlay');
   var overlayCC = overlay.getContext('2d');
-  
+
   /********** check and set up video/webcam **********/
 
   function enablestart() {
@@ -79,6 +79,7 @@ javascript:
     // start tracking
     ctracker.start(vid);
     // start loop to draw face
+
     drawLoop();
   }
   
@@ -108,5 +109,7 @@ javascript:
         }
       }
     }
+
+
   }
-      
+
