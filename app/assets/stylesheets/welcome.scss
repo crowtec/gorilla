@@ -2,13 +2,22 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import "compass";
+
 
 #videoel, #overlay{
   position: absolute;
-  left: 0;
+  left: 50%;
   top: 0;
-  width: 600;
-  height: auto;
+  width: auto;
+  height: 50%;
   max-height: 100%;
+  @include translate(-50%, 0);
+}
 
+#emotion_container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include translate(-50%, 0);
 }

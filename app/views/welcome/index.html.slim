@@ -2,14 +2,14 @@
   #container
     video#videoel height="300" loop="" preload="auto" width="400" 
     canvas#overlay height="300" width="400" 
-  / #emotion_container
+  #emotion_container
     #emotion_icons
-      img#icon1.emotion_icon src="./media/icon_angry.png" /
-      img#icon2.emotion_icon src="./media/icon_sad.png" /
-      img#icon3.emotion_icon src="./media/icon_surprised.png" /
-      img#icon4.emotion_icon src="./media/icon_happy.png" /
-    #emotion_chart
-  #controls
+      = image_tag 'icon_angry.png', id: 'icon1', class: 'emotion_icon'
+      = image_tag 'icon_sad.png', id: 'icon2', class: 'emotion_icon'
+      = image_tag 'icon_surprised.png', id: 'icon3', class: 'emotion_icon'
+      = image_tag 'icon_happy.png', id: 'icon4', class: 'emotion_icon'
+    / #emotion_chart
+  / #controls
     input#startbutton.btn disabled="disabled" onclick="startVideo()" type="button" value="wait, loading video" /
 
 
@@ -73,6 +73,11 @@ javascript:
     // start loop to draw face
     drawLoop();
   }
+  
+  var ec = new emotionClassifier();
+  ec.init(emotionModel);
+  var emotionData = ec.getBlank();
+
   startVideo();
   
   function drawLoop() {
@@ -84,9 +89,9 @@ javascript:
     }
     var cp = ctracker.getCurrentParameters();
     
-  /*  var er = ec.meanPredict(cp);
+    var er = ec.meanPredict(cp);
     if (er) {
-      updateData(er);
+      // updateData(er);
       for (var i = 0;i < er.length;i++) {
         if (er[i].value > 0.4) {
           document.getElementById('icon'+(i+1)).style.visibility = 'visible';
@@ -94,5 +99,6 @@ javascript:
           document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
         }
       }
-    }*/
+    }
   }
+  

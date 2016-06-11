@@ -14,7 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require clmtrackr
-//= require model_pca_20_svm
+//= require model_pca_20_svm_emotionDetection
+//= require emotionmodel
+//= require emotion_classifier
 //= require_tree .
 
 
