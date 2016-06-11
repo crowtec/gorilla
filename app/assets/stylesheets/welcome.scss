@@ -41,43 +41,60 @@ a, a:active, a:focus, a:hover{
   //opacity: 0;
 }
 
-  .box{
-    margin-top: 50%;
-    @inlude translateY(-50%);
-    font-family: Inconsolata, Serif;
-    background-color: rgba(255,255,255,.5);
-    color: white;
-    padding: 20px;
-    border: 2px solid white;
-    height: 180px;
 
-    .title{
-      display: inline;
-      font-size: 30px;
-      .blue{
-          color: #00cef6;
-        }
-    }
+
+.box{
+  margin-top: 50%;
+  @inlude translateY(-50%);
+  font-family: Inconsolata, Serif;
+  background-color: rgba(255,255,255,.5);
+  color: white;
+  padding: 20px;
+  border: 2px solid white;
+  height: 180px;
+
+  .title{
+    display: inline;
+    font-size: 30px;
+    .blue{
+        color: #00cef6;
+      }
   }
+}
 
 
-  .button{
-    text-align: center;
-    color: white;
-    padding: 20px;
-    border: 1px solid white;
-    color: white;
-    margin: 10px;
-    max-width: 150px;
+.button{
+  text-align: center;
+  color: white;
+  padding: 20px;
+  border: 1px solid white;
+  color: white;
+  margin: 10px;
+  max-width: 150px;
+  box-sizing: border-box;
+  font-size: 18px;
+  @include box-shadow(#ddd 5px 5px 10px);
+
+  &:hover{
+    @include box-shadow(#ddd 1px 1px 10px);
     box-sizing: border-box;
-    font-size: 18px;
-    @include box-shadow(#ddd 5px 5px 10px);
+    margin: 12px;
 
-    &:hover{
-      @include box-shadow(#ddd 1px 1px 10px);
-      box-sizing: border-box;
-      margin: 12px;
-
-    }
   }
+}
 
+
+.verify-voice {
+  @include translateX(-50%);
+  color: white;
+  position: absolute;
+  bottom: 100px;
+  width: 880px;
+  left: 50%;
+
+  .box {
+    background-color: rgba(255,255,255, .75);
+    color: #2E2F30;
+    height: auto;
+  }
+}
