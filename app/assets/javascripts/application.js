@@ -16,3 +16,37 @@
 //= require clmtrackr
 //= require model_pca_20_svm
 //= require_tree .
+
+
+if (annyang) {
+    // Let's define a command.
+    var commands = {
+        'hola': function() {
+            console.log("hello");
+            //alert('Hello world!');
+        },
+        'son las tres': function() {
+            console.log("son las tres");
+            //alert('Hello world!');
+        }
+    };
+
+
+    // Add our commands to annyang
+    annyang.addCommands(commands);
+
+    annyang.addCallback('error', function() {
+        console.log("error");
+    });
+
+    annyang.addCallback('resultMatch', function(userSaid, commandText, phrases) {
+        console.log(userSaid); // sample output: 'hello'
+        console.log(commandText); // sample output: 'hello (there)'
+        console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+    });
+
+    annyang.setLanguage('es-ES');
+    // Start listening.
+    annyang.start({ autoRestart: false, continuous: false });
+    //annyang.start({ autoRestart: true, continuous: false });
+}
