@@ -16,6 +16,8 @@
 
 
   section.verify-voice
+    = image_tag "http://statics.cribeo.com/m/02c0/22173_38916_cc-2102394-colega-fumado-yo-estare-borracho_500_454.jpg"
+    i#record.fa.fa-microphone aria-hidden="true"
     .box
       p Por favor, lea las siguientes frases:
       h1#sentence-reading
@@ -119,10 +121,14 @@ javascript:
     "la riqueza consiste mucho más en el disfrute que en la posesión"
   ];
 
-  $(function () {
+  $("#record").click(function () {
+    var attempt = 0;
+
+    $(this).css("display", "none");
+    $(this).siblings(".box").fadeIn();
+
     if (annyang) {
       // Let's define a command.
-
       var commands = {};
 
       sentences.forEach(function (element) {
@@ -151,18 +157,29 @@ javascript:
         console.log(userSaid); // sample output: 'hello'
         console.log(commandText); // sample output: 'hello (there)'
         console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+        console.log("good!!");
       });
 
       annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
-        $("#read-sentence").html(userSaid[0]);
-        $("#correct-read").html("Has fallado =(");
-        console.log(userSaid);
-        setTimeout(function () {
-          $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
-          $("#read-sentence").html("");
-          $("#correct-read").html("");
-        }, 3000);
-        annyang.resume();
+        if (++attempt < 1) {
+          $("#read-sentence").html(userSaid[0]);
+          $("#correct-read").html("Has fallado =(");
+          console.log(userSaid);
+          setTimeout(function () {
+            $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+            $("#read-sentence").html("");
+            $("#correct-read").html("");
+          }, 3000);
+          annyang.resume();
+        } else {
+          annyang.abort();
+          setTimeout(function () {
+            $(".verify-wrapper .box").fadeOut();
+            $(".verify-wrapper img").css("display", "block");
+          }, 2000);
+
+
+        }
       });
 
 

@@ -4,6 +4,7 @@
 
 @import url(https://fonts.googleapis.com/css?family=Inconsolata:400,700);
 @import "compass";
+@import "font-awesome";
 
 html, body{
   width: 100%;
@@ -108,13 +109,34 @@ a, a:active, a:focus, a:hover{
   @include translateX(-50%);
   color: white;
   position: absolute;
-  bottom: 100px;
+  bottom: 50px;
   width: 880px;
   left: 50%;
 
+  img {
+    display: none;
+    margin: auto;
+  }
+
+  .fa {
+    @include border-radius(50%);
+    @include translateX(-50%);
+    background-color: #00cef6;
+    color: white;
+    cursor: pointer;
+    font-size: 60px;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    line-height: 100px;
+  }
   .box {
     background-color: rgba(255,255,255, .75);
     color: #2E2F30;
+    display: none;
     height: auto;
   }
 }
