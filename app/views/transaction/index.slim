@@ -1,1 +1,12 @@
-.transactions
+.container
+  .big-title Tus transacciones
+.map-box
+  #map
+javascript:
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.4116652, lng: -3.71669},
+      zoom: 13
+    });
+  }

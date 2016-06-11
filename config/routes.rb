@@ -2,6 +2,6 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'verify' => 'welcome#verify'
 
-  resources :transactions
+  resources :transaction
 
 end

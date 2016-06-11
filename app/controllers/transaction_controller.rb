@@ -1,4 +1,4 @@
-class WelcomeController < ApplicationController
+class TransactionController < ApplicationController
   include OpenbankHelper
   def index
     @transactions = Transaction.all

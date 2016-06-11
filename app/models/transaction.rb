@@ -1,6 +1,6 @@
 class Transaction
   include Mongoid::Document
-  include Mongoid::Timestamp
+  include Mongoid::Timestamps
 
   field :transaction_id, type: String
   field :from_account_id, type: String
