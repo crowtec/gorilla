@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import url(https://fonts.googleapis.com/css?family=Inconsolata:400,700);
 
 #videoel, #overlay{
   position: absolute;
@@ -11,4 +12,15 @@
   height: auto;
   max-height: 100%;
 
+}
+
+
+
+.verify-wrapper {
+  font-family: 'Inconsolata', sans-serif;
+  font-weight: 400;
+}
+
+#correct-read {
+  opacity: 0;
 }

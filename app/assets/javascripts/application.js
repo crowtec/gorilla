@@ -18,35 +18,50 @@
 //= require_tree .
 
 
-if (annyang) {
-    // Let's define a command.
-    var commands = {
-        'hola': function() {
-            console.log("hello");
-            //alert('Hello world!');
-        },
-        'son las tres': function() {
-            console.log("son las tres");
-            //alert('Hello world!');
-        }
-    };
+$(function () {
+    if (annyang) {
+        // Let's define a command.
+        var commands = {
+            'Tres tristes tigres comen trigo en un trigal': function () {
+                $("#read-sentence").html("Tres tristes trigres comen trigo en un trigal");
+                $("#correct-read").css({
+                    opacity: 1
+                });
+            },
+            'son las tres': function () {
+
+            }
+        };
 
 
-    // Add our commands to annyang
-    annyang.addCommands(commands);
+        // Add our commands to annyang
+        annyang.addCommands(commands);
 
-    annyang.addCallback('error', function() {
-        console.log("error");
-    });
+        annyang.addCallback('error', function () {
+            console.log("error");
+        });
 
-    annyang.addCallback('resultMatch', function(userSaid, commandText, phrases) {
-        console.log(userSaid); // sample output: 'hello'
-        console.log(commandText); // sample output: 'hello (there)'
-        console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
-    });
+        annyang.addCallback('resultMatch', function (userSaid, commandText, phrases) {
+            console.log(userSaid); // sample output: 'hello'
+            console.log(commandText); // sample output: 'hello (there)'
+            console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+        });
 
-    annyang.setLanguage('es-ES');
-    // Start listening.
-    annyang.start({ autoRestart: false, continuous: false });
-    //annyang.start({ autoRestart: true, continuous: false });
-}
+        annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
+            $("#read-sentence").html(userSaid[0]);
+            console.log(userSaid);
+
+        });
+
+
+        annyang.addCallback('result', function (userSaid) {
+            //$("#read-sentence").html(userSaid[0]);
+            console.log(userSaid); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+        });
+
+        annyang.setLanguage('es-ES');
+        // Start listening.
+        annyang.start({autoRestart: false, continuous: false});
+        //annyang.start({ autoRestart: true, continuous: false });
+    }
+});
