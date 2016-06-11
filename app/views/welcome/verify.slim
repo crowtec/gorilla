@@ -116,10 +116,6 @@ javascript:
         }
       }
       
-      if (predictions.length == 300){
-        calculateEmotion();
-        predictions = [];
-      }
     }
   }
   
@@ -164,7 +160,7 @@ javascript:
       if (highest_emotion != last_highest_emotion){
         emotion_variation += 0.3;
       } else{
-        emotion_variation -= 0.02;
+        emotion_variation -= 0.01;
         if (emotion_variation < 0) {
           emotion_variation = 0;
         }
@@ -185,6 +181,7 @@ javascript:
   ];
 
   $("#record").click(function () {
+    predictions = [];
     var attempt = 0;
 
     $(this).css("display", "none");
@@ -247,6 +244,7 @@ javascript:
 
 
       annyang.addCallback('result', function (userSaid) {
+        calculateEmotion();
         //$("#read-sentence").html(userSaid[0]);
         console.log(userSaid); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
       });
