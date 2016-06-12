@@ -26,172 +26,237 @@
 
     
 javascript:
-  var vid = document.getElementById('videoel');
-  var overlay = document.getElementById('overlay');
-  var overlayCC = overlay.getContext('2d');
-
-  /********** check and set up video/webcam **********/
-
-  function enablestart() {
-    var startbutton = document.getElementById('startbutton');
-    startbutton.value = "start";
-    startbutton.disabled = null;
-  }
   
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-  window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
-
-  // check for camerasupport
-  if (navigator.getUserMedia) {
-    // set up stream
+  $(function(){
+  
     
-    var videoSelector = {video : true};
-    if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) {
-      var chromeVersion = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
-      if (chromeVersion < 20) {
-        videoSelector = "video";
-      }
-    };
-  
-    //navigator.getUserMedia(videoSelector, function( stream ) {
-    navigator.getUserMedia.call(navigator, videoSelector, function( stream ) {
-      if (vid.mozCaptureStream) {
-        vid.mozSrcObject = stream;
-      } else {
-        vid.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
-      }
-      vid.play();
-    }, function() {
+    var vid = document.getElementById('videoel');
+    var overlay = document.getElementById('overlay');
+    var overlayCC = overlay.getContext('2d');
+
+    /********** check and set up video/webcam **********/
+
+    function enablestart() {
+      var startbutton = document.getElementById('startbutton');
+      startbutton.value = "start";
+      startbutton.disabled = null;
+    }
+    
+    
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+
+    // check for camerasupport
+    if (navigator.getUserMedia) {
+      // set up stream
+      
+      var videoSelector = {video : true};
+      if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) {
+        var chromeVersion = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+        if (chromeVersion < 20) {
+          videoSelector = "video";
+        }
+      };
+    
+      navigator.getUserMedia(videoSelector, function( stream ) {
+        if (vid.mozCaptureStream) {
+          vid.mozSrcObject = stream;
+        } else {
+          vid.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+        }
+        vid.play();
+      }, function() {
+        //insertAltVideo(vid);
+        alert("There was some problem trying to fetch video from your webcam. If you have a webcam, please make sure to accept when the browser asks for access to your webcam.");
+      });
+    } else {
       //insertAltVideo(vid);
-      alert("There was some problem trying to fetch video from your webcam. If you have a webcam, please make sure to accept when the browser asks for access to your webcam.");
-    });
-  } else {
-    //insertAltVideo(vid);
-    alert("This demo depends on getUserMedia, which your browser does not seem to support. :(");
-  }
-
-  vid.addEventListener('canplay', enablestart, false);
-  
-  /*********** setup of emotion detection *************/
-
-  var ctracker = new clm.tracker({useWebGL : true});
-  ctracker.init(pModel);
-
-  function startVideo() {
-    // start video
-    // vid.play();
-    // start tracking
-    ctracker.start(vid);
-    // start loop to draw face
-
-    drawLoop();
-  }
-  
-  var ec = new emotionClassifier();
-  ec.init(emotionModel);
-  var emotionData = ec.getBlank();
-
-  startVideo();
-  
-  function drawLoop() {
-    requestAnimationFrame(drawLoop);
-    overlayCC.clearRect(0, 0, 400, 300);
-    //psrElement.innerHTML = "score :" + ctracker.getScore().toFixed(4);
-    if (ctracker.getCurrentPosition()) {
-      ctracker.draw(overlay);
+      alert("This demo depends on getUserMedia, which your browser does not seem to support. :(");
     }
-    var cp = ctracker.getCurrentParameters();
+
+    vid.addEventListener('canplay', enablestart, false);
     
-    var er = ec.meanPredict(cp);
-    if (er) {
-      // updateData(er);
-      for (var i = 0;i < er.length;i++) {
-        if (er[i].value > 0.4) {
-          document.getElementById('icon'+(i+1)).style.visibility = 'visible';
-        } else {
-          document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
+    /*********** setup of emotion detection *************/
+
+    var ctracker = new clm.tracker({useWebGL : true});
+    ctracker.init(pModel);
+
+    function startVideo() {
+      // start video
+      // vid.play();
+      // start tracking
+      ctracker.start(vid);
+      // start loop to draw face
+
+      drawLoop();
+    }
+    
+    
+    var predictions = [];
+    
+    var ec = new emotionClassifier();
+    ec.init(emotionModel);
+    var emotionData = ec.getBlank();
+
+    startVideo();
+    
+    function drawLoop() {
+      requestAnimationFrame(drawLoop);
+      overlayCC.clearRect(0, 0, 400, 300);
+      //psrElement.innerHTML = "score :" + ctracker.getScore().toFixed(4);
+      if (ctracker.getCurrentPosition()) {
+        ctracker.draw(overlay);
+      }
+      var cp = ctracker.getCurrentParameters();
+      
+      var er = ec.meanPredict(cp);
+      if (er) {
+        predictions.push(er);
+        // updateData(er);
+        for (var i = 0;i < er.length;i++) {
+          if (er[i].value > 0.4) {
+            document.getElementById('icon'+(i+1)).style.visibility = 'visible';
+          } else {
+            document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
+          }
         }
+        
       }
     }
-  }
-
-  var sentences = [
-    "el ignorante afirma el sabio duda y reflexiona",
-    "el sabio no dice todo lo que piensa pero siempre piensa todo lo que dice",
-    "no se puede ser y no ser algo al mismo tiempo y bajo el mismo aspecto",
-    "la riqueza consiste mucho más en el disfrute que en la posesión"
-  ];
-
-  $("#record").click(function () {
-    var attempt = 0;
-
-    $(this).css("display", "none");
-    $(this).siblings(".box").fadeIn();
-
-    if (annyang) {
-      // Let's define a command.
-      var commands = {};
-
-      sentences.forEach(function (element) {
-        commands[element] = function () {
-          $("#read-sentence").html(element);
-          $("#correct-read").html("Has acertado, ouh yeah!");
-          setTimeout(function () {
-            $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
-            $("#read-sentence").html("");
-            $("#correct-read").html("");
-          }, 1000);
-          annyang.resume();
-        };
-      });
-
-      $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
-
-      // Add our commands to annyang
-      annyang.addCommands(commands);
-
-      annyang.addCallback('error', function () {
-        console.log("error");
-      });
-
-      annyang.addCallback('resultMatch', function (userSaid, commandText, phrases) {
-        console.log(userSaid); // sample output: 'hello'
-        console.log(commandText); // sample output: 'hello (there)'
-        console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
-        console.log("good!!");
-      });
-
-      annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
-        if (++attempt < 1) {
-          $("#read-sentence").html(userSaid[0]);
-          $("#correct-read").html("Has fallado =(");
-          console.log(userSaid);
-          setTimeout(function () {
-            $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
-            $("#read-sentence").html("");
-            $("#correct-read").html("");
-          }, 3000);
-          annyang.resume();
-        } else {
-          annyang.abort();
-          setTimeout(function () {
-            $(".verify-wrapper .box").fadeOut();
-            $(".verify-wrapper img").css("display", "block");
-          }, 2000);
-
-
+    
+    var emotion_points = [
+      {
+      name: "angry",
+      value: -2
+      },
+      {
+      name: "sad",
+      value: -2
+      },
+      {
+      name: "surprised",
+      value: 1
+      },
+      {
+      name: "happy",
+      value: 2
+      },
+    ]
+    
+    var calculateEmotion = function(){
+      var emotion_value = 0;
+      var emotion_variation = 0;
+      var last_highest_emotion = 0;
+      $.each(predictions, function(index, p) {
+        var highest_emotion = 0;
+        var highest_emotion_value = 0;
+        
+        for (var i = 0; i < p.length; i++) {
+          if (p[i].value > highest_emotion_value) {
+            highest_emotion = i;
+            highest_emotion_value = p[i].value;
+          }
+          
+          if (p[i].value > 0.4) {
+            emotion_value += emotion_points[i].value;
+          } 
         }
-      });
+        
+        if (highest_emotion != last_highest_emotion){
+          emotion_variation += 0.3;
+        } else{
+          emotion_variation -= 0.02;
+          if (emotion_variation < 0) {
+            emotion_variation = 0;
+          }
+        }
+        
+        last_highest_emotion = highest_emotion;
+      });  
+      
+      console.log("value: " + emotion_value);
+      console.log("variation: " + emotion_variation);
+    };
+
+    var sentences = [
+      "el ignorante afirma el sabio duda y reflexiona",
+      "el sabio no dice todo lo que piensa, pero siempre piensa todo lo que dice",
+      "no se puede ser y no ser algo al mismo tiempo y bajo el mismo aspecto",
+      "la riqueza consiste mucho más en el disfrute que en la posesión"
+    ];
+
+    $("#record").click(function () {
+      predictions = [];
+      var attempt = 0;
+
+      $(this).css("display", "none");
+      $(this).siblings(".box").fadeIn();
+
+      if (annyang) {
+        // Let's define a command.
+        var commands = {};
+
+        sentences.forEach(function (element) {
+          commands[element] = function () {
+            $("#read-sentence").html(element);
+            $("#correct-read").html("Has acertado, ouh yeah!");
+            setTimeout(function () {
+              $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+              $("#read-sentence").html("");
+              $("#correct-read").html("");
+            }, 1000);
+            annyang.resume();
+          };
+        });
+
+        $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+
+        // Add our commands to annyang
+        annyang.addCommands(commands);
+
+        annyang.addCallback('error', function () {
+          console.log("error");
+        });
+
+        annyang.addCallback('resultMatch', function (userSaid, commandText, phrases) {
+          console.log(userSaid); // sample output: 'hello'
+          console.log(commandText); // sample output: 'hello (there)'
+          console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+          console.log("good!!");
+        });
+
+        annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
+          if (++attempt < 1) {
+            $("#read-sentence").html(userSaid[0]);
+            $("#correct-read").html("Has fallado =(");
+            console.log(userSaid);
+            setTimeout(function () {
+              $("#sentence-reading").html(sentences[Math.floor(Math.random() * sentences.length)]);
+              $("#read-sentence").html("");
+              $("#correct-read").html("");
+            }, 3000);
+            annyang.resume();
+          } else {
+            annyang.abort();
+            setTimeout(function () {
+              $(".verify-wrapper .box").fadeOut();
+              $(".verify-wrapper img").css("display", "block");
+            }, 2000);
 
 
-      annyang.addCallback('result', function (userSaid) {
-        //$("#read-sentence").html(userSaid[0]);
-        console.log(userSaid); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
-      });
+          }
+        });
 
-      annyang.setLanguage('es-ES');
-      // Start listening.
-      annyang.start({autoRestart: false, continuous: false});
-      //annyang.start({ autoRestart: true, continuous: false });
-    }
+
+        annyang.addCallback('result', function (userSaid) {
+          //$("#read-sentence").html(userSaid[0]);
+          console.log(userSaid); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+        });
+
+        annyang.setLanguage('es-ES');
+        // Start listening.
+        annyang.start({autoRestart: false, continuous: false});
+        //annyang.start({ autoRestart: true, continuous: false });
+      }
+    });
   });
