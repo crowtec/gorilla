@@ -8,7 +8,7 @@ class Transaction
   field :to_account_id, type: String
   field :to_bank_id, type: String
   field :amount, type: String
-  field :currency, type: String
+  field :currency, type: String, default: "GBP"
   field :description, type: String
   field :user_status, type: String
   field :voice_test, type: String

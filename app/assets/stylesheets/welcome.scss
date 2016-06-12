@@ -43,8 +43,7 @@ a, a:active, a:focus, a:hover{
 }
 
 .box{
-  margin-top: 50%;
-  @inlude translateY(-50%);
+  margin-top: 5%;
   font-family: Inconsolata, Serif;
   background-color: rgba(255,255,255,.5);
   color: white;
@@ -138,5 +137,13 @@ a, a:active, a:focus, a:hover{
     color: #2E2F30;
     display: none;
     height: auto;
+  }
+}
+
+.notice-wrapper{
+  img{
+    width: 30%;
+    margin-left: 35%;
+    margin-top: 10%;
   }
 }
