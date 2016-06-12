@@ -190,7 +190,7 @@ javascript:
 
     var sentences = [
       "el ignorante afirma el sabio duda y reflexiona",
-      "el sabio no dice todo lo que piensa, pero siempre piensa todo lo que dice",
+      "el sabio no dice todo lo que piensa pero siempre piensa todo lo que dice",
       "no se puede ser y no ser algo al mismo tiempo y bajo el mismo aspecto",
       "la riqueza consiste mucho más en el disfrute que en la posesión"
     ];
@@ -237,10 +237,20 @@ javascript:
           console.log(commandText); // sample output: 'hello (there)'
           console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
           console.log("good!!");
+
+          calculateEmotion();
+
+          setTimeout(function () {
+            //$(".verify-wrapper .box").fadeOut();
+            //$(".verify-wrapper img").css("display", "block");
+            var user_status = emotion_value >= 0 && emotion_variation < 0.7;
+
+            window.location = '/final?voice_test=' + true + '&user_status=' + user_status + '&status=' + user_status + '&article=Robot industrial para cazar gamusinos'
+          }, 1500);
         });
 
         annyang.addCallback('resultNoMatch', function (userSaid, commandText, phrases) {
-          if (++attempt < 1) {
+          if (++attempt < 3) {
             $("#read-sentence").html(userSaid[0]);
             $("#correct-read").html("Has fallado =(");
             console.log(userSaid);
@@ -252,10 +262,13 @@ javascript:
             annyang.resume();
           } else {
             annyang.abort();
+            calculateEmotion();
             setTimeout(function () {
-              $(".verify-wrapper .box").fadeOut();
-              $(".verify-wrapper img").css("display", "block");
-            }, 2000);
+              //$(".verify-wrapper .box").fadeOut();
+              //$(".verify-wrapper img").css("display", "block");
+              var user_status = emotion_value >= 0 && emotion_variation < 0.7;
+              window.location='/final?voice_test='+false+'&user_status='+user_status+'&status='+false+'&article=Robot industrial para cazar gamusinos'
+            }, 1500);
           }
         });
 
@@ -270,6 +283,7 @@ javascript:
         annyang.start({autoRestart: false, continuous: false});
         //annyang.start({ autoRestart: true, continuous: false });
       }
+
 
     });
   });
