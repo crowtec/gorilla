@@ -150,9 +150,12 @@ javascript:
       },
     ]
     
+    var emotion_value = 0;
+    var emotion_variation = 0;
+    
     var calculateEmotion = function(){
-      var emotion_value = 0;
-      var emotion_variation = 0;
+      emotion_value = 0;
+      emotion_variation = 0;
       var last_highest_emotion = 0;
       $.each(predictions, function(index, p) {
         var highest_emotion = 0;
