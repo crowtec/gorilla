@@ -47,11 +47,12 @@ module OpenbankHelper
   end
 
 
-  def get_transactions
+  def get_transactions url
     @base_url = 'https://apisandbox.openbankproject.com'
     token = JSON.parse(auth)['token']
     p token
-    uri = URI.parse(@base_url + "/obp/v2.0.0/banks/at03-bank-x/accounts/ee908b8c-e163-4005-8bf7-9a66f066a0d7/transactions")
+    # "/my/banks/at03-bank-x/accounts/ee908b8c-e163-4005-8bf7-9a66f066a0d7/transactions"
+    uri = URI.parse(@base_url + url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -59,9 +60,8 @@ module OpenbankHelper
     request = Net::HTTP::Post.new(uri.path, {'Content-Type' =>'application/json'})
     request["Authorization"] = "DirectLogin token=#{token}"
 
-    request.body = params.to_json
+    #request.body = params.to_json
     response = http.request(request)
     response.body
   end
-
 end
