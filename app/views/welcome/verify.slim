@@ -53,7 +53,8 @@ javascript:
       }
     };
   
-    navigator.getUserMedia(videoSelector, function( stream ) {
+    //navigator.getUserMedia(videoSelector, function( stream ) {
+    navigator.getUserMedia.call(navigator, videoSelector, function( stream ) {
       if (vid.mozCaptureStream) {
         vid.mozSrcObject = stream;
       } else {
